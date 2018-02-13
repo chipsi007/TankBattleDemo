@@ -16,7 +16,10 @@ class TANKBATTLE_API ATankAIController : public AAIController
 	GENERATED_BODY()
 	
 public:
-	ATank * GetAIControlledTank() const;
 
-	void BeginPlay() override;
+	virtual void BeginPlay() override;
+
+private:
+	ATank * GetAIControlledTank() const;
+	ATank * GetPlayerTank() const; 
 };

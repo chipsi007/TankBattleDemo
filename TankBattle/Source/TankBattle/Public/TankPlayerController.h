@@ -17,10 +17,10 @@ class TANKBATTLE_API ATankPlayerController : public APlayerController
 
 public:
 	ATank * GetControlledTank() const; 
-	
 	void BeginPlay() override; 
-
 	virtual void Tick(float DeltaTime) override;
 
-	
+private:
+	void ATankPlayerController::AimTowardsCrosshair();
+	bool const ATankPlayerController::GetSightRayHitLocation(FVector & OutHitLocation);
 };

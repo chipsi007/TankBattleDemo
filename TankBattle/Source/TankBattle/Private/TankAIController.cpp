@@ -14,14 +14,11 @@ ATank * ATankAIController::GetPlayerTank() const
 }
 
 
-
-
 void ATankAIController::BeginPlay()
 {
 	Super::BeginPlay();
 	
 	auto playerTank = GetPlayerTank(); 
-
 
 	if (!playerTank)
 	{

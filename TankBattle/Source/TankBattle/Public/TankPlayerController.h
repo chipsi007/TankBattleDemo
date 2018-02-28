@@ -31,4 +31,6 @@ private:
 	UPROPERTY(EditAnywhere)
 	float crossHairYLocation = 0.33333f;
 
+	bool ATankPlayerController::GetLookDirection(FVector2D ScreenLocation, FVector & LookDirection) const; 
+
 };

@@ -22,7 +22,9 @@ virtual void Tick(float DeltaTime) override;
 private:
 	ATank * GetControlledTank() const; 
 	void ATankPlayerController::AimTowardsCrosshair();
-	bool const ATankPlayerController::GetSightRayHitLocation(FVector & OutHitLocation);
+	bool ATankPlayerController::GetSightRayHitLocation(FVector & OutHitLocation) const;
+	bool ATankPlayerController::GetLookDirection(FVector2D ScreenLocation, FVector & LookDirection) const;
+	bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection, FVector &Hitlocation) const;
 
 private:
 	UPROPERTY(EditAnywhere)
@@ -31,6 +33,6 @@ private:
 	UPROPERTY(EditAnywhere)
 	float crossHairYLocation = 0.33333f;
 
-	bool ATankPlayerController::GetLookDirection(FVector2D ScreenLocation, FVector & LookDirection) const; 
-
+	UPROPERTY(EditAnywhere)
+	float LineTraceRange = 100000.0f;
 };

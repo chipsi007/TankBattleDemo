@@ -39,15 +39,16 @@ void ATankPlayerController::AimTowardsCrosshair()
 	if (!GetControlledTank()) { return;  }
 
 	FVector HitLocation; 
+
 	if (GetSightRayHitLocation(HitLocation))
 	{
-		//UE_LOG(LogTemp, Warning, TEXT("Ray direction: %s"), *HitLocation.ToString());
+		UE_LOG(LogTemp, Warning, TEXT("Hit Location: %s"), *HitLocation.ToString());
 		//TODO Tell controlled Tank to aim at this point. 
 	}
 	
 }
 
-bool const ATankPlayerController::GetSightRayHitLocation(FVector & OutHitLocation)
+bool ATankPlayerController::GetSightRayHitLocation(FVector & OutHitLocation) const
 {
 	int32 ViewportSizeX, ViewportSizeY; 
 	GetViewportSize(ViewportSizeX, ViewportSizeY); // out params. 
@@ -56,8 +57,9 @@ bool const ATankPlayerController::GetSightRayHitLocation(FVector & OutHitLocatio
 	FVector LookDirection;
 	if (GetLookDirection(ScreenLocation, LookDirection))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Look Direction: %s"), *LookDirection.ToString());
-
+		GetLookVectorHitLocation(LookDirection, OutHitLocation); 
+		//UE_LOG(LogTemp, Warning, TEXT("Look Direction: %s"), *LookDirection.ToString());
+		
 	}
 
 	return true;
@@ -65,11 +67,31 @@ bool const ATankPlayerController::GetSightRayHitLocation(FVector & OutHitLocatio
 
 bool ATankPlayerController::GetLookDirection(FVector2D ScreenLocation, FVector & LookDirection) const
 {
-	FVector CameraWorldLocation; //placeholder for out. 
+	FVector CameraWorldLocation; //placeholder for out vector 
 
 	return DeprojectScreenPositionToWorld(
 		ScreenLocation.X, 
 		ScreenLocation.Y, 
 		CameraWorldLocation, 
 		LookDirection); 
+}
+
+bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection, FVector & outHitLocation) const
+{
+	FHitResult HitResult; 
+	auto StartLocation = PlayerCameraManager->GetCameraLocation(); 
+	auto EndLocation = StartLocation + (LookDirection * LineTraceRange); 
+	
+	if (GetWorld()->LineTraceSingleByChannel(
+		HitResult,
+		StartLocation,
+		EndLocation,
+		ECollisionChannel::ECC_Visibility))
+	{
+		outHitLocation = HitResult.Location;
+		return true; 
+	}
+	outHitLocation = FVector(0); 
+	return false; 
+	
 }
